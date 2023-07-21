@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hkeles <hkeles@student.42kocaeli.com.tr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 12:47:43 by hkeles            #+#    #+#             */
-/*   Updated: 2023/07/19 12:47:46 by hkeles           ###   ########.tr       */
+/*   Created: 2023/07/19 12:46:25 by hkeles            #+#    #+#             */
+/*   Updated: 2023/07/19 12:46:37 by hkeles           ###   ########.tr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,10 @@ static int	ft_have_nl(char *s)
 
 	if (!s)
 		return (0);
-	i = 0;
-	while (s[i] != '\0')
-	{
+	i = -1;
+	while (s[++i] != '\0')
 		if (s[i] == '\n')
 			return (1);
-		i++;
-	}
 	return (0);
 }
 
@@ -95,27 +92,27 @@ char	*get_next_line(int fd)
 {
 	char		buf[BUFFER_SIZE + 1];
 	long		ret;
-	static char	*stash[5000];
+	static char	*stash = NULL;
 	char		*line;
 
 	line = 0;
 	ret = BUFFER_SIZE;
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (ft_free_stash(&stash[fd], 0));
+		return (ft_free_stash(&stash, 0));
 	while (ret > 0)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
-		if ((ret <= 0 && !stash[fd]) || ret == -1)
-			return (ft_free_stash(&stash[fd], 0));
+		if ((ret <= 0 && !stash) || ret == -1)
+			return (ft_free_stash(&stash, 0));
 		buf[ret] = '\0';
-		stash[fd] = ft_copy_to_stash(stash[fd], buf);
-		if (ft_have_nl(stash[fd]))
+		stash = ft_copy_to_stash(stash, buf);
+		if (ft_have_nl(stash))
 		{
-			line = ft_extract_line(stash[fd]);
+			line = ft_extract_line(stash);
 			if (!line)
-				return (ft_free_stash(&stash[fd], 0));
-			return (stash[fd] = ft_recreate_stash(stash[fd]), line);
+				return (ft_free_stash(&stash, 0));
+			return (stash = ft_recreate_stash(stash), line);
 		}
 	}
-	return (ft_free_stash(&stash[fd], 1));
+	return (ft_free_stash(&stash, 1));
 }
