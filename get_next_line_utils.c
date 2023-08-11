@@ -1,25 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hkeles <hkeles@student.42kocaeli.com.tr>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 12:47:28 by hkeles            #+#    #+#             */
-/*   Updated: 2023/07/19 12:47:31 by hkeles           ###   ########.tr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
+#include <stdlib.h>
 
 size_t	ft_strlen(const char *s)
 {
-	size_t	len;
+	size_t	i;
 
-	len = 0;
-	while (s[len] != '\0')
-		len++;
-	return (len);
+	i = -1;
+	while (s[++i])
+		;
+	return (i);
 }
 
 char	*ft_strdup(const char *s1)
@@ -30,14 +19,10 @@ char	*ft_strdup(const char *s1)
 	res = malloc(sizeof(char) * (ft_strlen(s1) + 1));
 	if (!res)
 		return (NULL);
-	i = 0;
-	while (s1[i] != '\0')
-	{
+	i = -1;
+	while (s1[++i])
 		res[i] = s1[i];
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
+	return (res[i] = '\0', res);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -51,21 +36,16 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!res)
 		return (NULL);
-	i = 0;
-	while (s1[i] != '\0')
-	{
+	i = -1;
+	while (s1[++i])
 		res[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (s2[j] != '\0')
+	j = -1;
+	while (s2[++j])
 	{
 		res[i] = s2[j];
 		i++;
-		j++;
 	}
-	res[i] = '\0';
-	return (res);
+	return (res[i] = '\0', res);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
@@ -83,16 +63,11 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	res = malloc(sizeof(char) * (len + 1));
 	if (!res)
 		return (NULL);
-	i = start;
+	i = start - 1;
 	j = 0;
-	while (i < calc_len && j < len)
-	{
+	while (++i < calc_len && ++j < len)
 		res[j] = s[i];
-		i++;
-		j++;
-	}
-	res[j] = '\0';
-	return (res);
+	return (res[j] = '\0', res);
 }
 
 void	*ft_free_stash(char **stash, int create_line)
@@ -111,11 +86,6 @@ void	*ft_free_stash(char **stash, int create_line)
 		return (NULL);
 	}
 	else if (create_line == 1)
-	{
-		line = ft_strdup(*stash);
-		free(*stash);
-		*stash = NULL;
-		return (line);
-	}
+		return (line = ft_strdup(*stash), free(*stash), *stash = NULL, line);
 	return (NULL);
 }
