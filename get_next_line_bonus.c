@@ -1,16 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hkeles <hkeles@student.42kocaeli.com.tr>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 12:47:43 by hkeles            #+#    #+#             */
-/*   Updated: 2023/07/19 12:47:46 by hkeles           ###   ########.tr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line_bonus.h"
+#include <stdlib.h>
 
 static char	*ft_copy_to_stash(char *stash, char *buf)
 {
@@ -24,9 +13,7 @@ static char	*ft_copy_to_stash(char *stash, char *buf)
 			return (NULL);
 		return (res);
 	}
-	res = ft_strjoin(stash, buf);
-	ft_free_stash(&stash, 0);
-	return (res);
+	return (res = ft_strjoin(stash, buf), ft_free_stash(&stash, 0), res);
 }
 
 static int	ft_have_nl(char *s)
@@ -59,14 +46,10 @@ static char	*ft_extract_line(char *stash)
 	line = malloc(sizeof(char) * (i + 2));
 	if (!line)
 		return (ft_free_stash(&line, 0));
-	j = 0;
-	while (j < i + 1)
-	{
+	j = -1;
+	while (++j < i + 1)
 		line[j] = stash[j];
-		j++;
-	}
-	line[j] = '\0';
-	return (line);
+	return (line[j] = '\0', line);
 }
 
 static char	*ft_recreate_stash(char *stash)
@@ -83,12 +66,8 @@ static char	*ft_recreate_stash(char *stash)
 		return (ft_free_stash(&stash, 0));
 	res = ft_substr(stash, i + 1, ft_strlen(stash));
 	if (!res)
-	{
-		ft_free_stash(&stash, 0);
-		return (NULL);
-	}
-	ft_free_stash(&stash, 0);
-	return (res);
+		return (ft_free_stash(&stash, 0), NULL);
+	return (ft_free_stash(&stash, 0), res);
 }
 
 char	*get_next_line(int fd)
