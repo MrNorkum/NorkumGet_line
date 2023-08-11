@@ -1,20 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hkeles <hkeles@student.42kocaeli.com.tr>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 12:47:00 by hkeles            #+#    #+#             */
-/*   Updated: 2023/07/19 12:48:26 by hkeles           ###   ########.tr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <unistd.h>
-# include <stdlib.h>
+#include <string.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 13
