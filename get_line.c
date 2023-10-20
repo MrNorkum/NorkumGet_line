@@ -1,24 +1,24 @@
-#include "get_next_line.h"
+#include "get_line.h"
 #include <unistd.h>
 
-static char	*ft_copy_to_stash(char *stash, char *buf)
+static char	*my_copy_to_stash(char *stash, char *buf)
 {
 	char	*res;
 
 	res = 0;
 	if (!stash && buf)
 	{
-		res = ft_strdup(buf);
+		res = my_strdup(buf);
 		if (!res)
 			return (NULL);
 		return (res);
 	}
-	res = ft_strjoin(stash, buf);
-	ft_free_stash(&stash, 0);
+	res = my_strjoin(stash, buf);
+	my_free_stash(&stash, 0);
 	return (res);
 }
 
-static int	ft_have_nl(char *s)
+static int	my_have_nl(char *s)
 {
 	size_t	i;
 
@@ -31,7 +31,7 @@ static int	ft_have_nl(char *s)
 	return (0);
 }
 
-static char	*ft_extract_line(char *stash)
+static char	*my_extract_line(char *stash)
 {
 	char	*line;
 	size_t	i;
@@ -39,12 +39,12 @@ static char	*ft_extract_line(char *stash)
 
 	i = 0;
 	if (!stash)
-		return (ft_free_stash(&stash, 0));
+		return (my_free_stash(&stash, 0));
 	while (stash[i] != '\n')
 		i++;
 	line = malloc(sizeof(char) * (i + 2));
 	if (!line)
-		return (ft_free_stash(&line, 0));
+		return (my_free_stash(&line, 0));
 	j = 0;
 	while (j < i + 1)
 	{
@@ -55,7 +55,7 @@ static char	*ft_extract_line(char *stash)
 	return (line);
 }
 
-static char	*ft_recreate_stash(char *stash)
+static char	*my_recreate_stash(char *stash)
 {
 	size_t	i;
 	char	*res;
@@ -66,18 +66,18 @@ static char	*ft_recreate_stash(char *stash)
 	while (stash[i] != '\n')
 		i++;
 	if (stash[i + 1] == '\0')
-		return (ft_free_stash(&stash, 0));
-	res = ft_substr(stash, i + 1, ft_strlen(stash));
+		return (my_free_stash(&stash, 0));
+	res = my_substr(stash, i + 1, my_strlen(stash));
 	if (!res)
 	{
-		ft_free_stash(&stash, 0);
+		my_free_stash(&stash, 0);
 		return (NULL);
 	}
-	ft_free_stash(&stash, 0);
+	my_free_stash(&stash, 0);
 	return (res);
 }
 
-char	*get_next_line(int fd)
+char	*get_line(int fd)
 {
 	char		buf[BUFFER_SIZE + 1];
 	long		ret;
@@ -87,21 +87,21 @@ char	*get_next_line(int fd)
 	line = 0;
 	ret = BUFFER_SIZE;
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (ft_free_stash(&stash, 0));
+		return (my_free_stash(&stash, 0));
 	while (ret > 0)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
 		if ((ret <= 0 && !stash) || ret == -1)
-			return (ft_free_stash(&stash, 0));
+			return (my_free_stash(&stash, 0));
 		buf[ret] = '\0';
-		stash = ft_copy_to_stash(stash, buf);
-		if (ft_have_nl(stash))
+		stash = my_copy_to_stash(stash, buf);
+		if (my_have_nl(stash))
 		{
-			line = ft_extract_line(stash);
+			line = my_extract_line(stash);
 			if (!line)
-				return (ft_free_stash(&stash, 0));
-			return (stash = ft_recreate_stash(stash), line);
+				return (my_free_stash(&stash, 0));
+			return (stash = my_recreate_stash(stash), line);
 		}
 	}
-	return (ft_free_stash(&stash, 1));
+	return (my_free_stash(&stash, 1));
 }

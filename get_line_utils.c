@@ -1,6 +1,6 @@
-#include "get_next_line_bonus.h"
+#include "get_line.h"
 
-size_t	ft_strlen(const char *s)
+size_t	my_strlen(const char *s)
 {
 	size_t	len;
 
@@ -10,12 +10,12 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-char	*ft_strdup(const char *s1)
+char	*my_strdup(const char *s1)
 {
 	char	*res;
 	size_t	i;
 
-	res = malloc(sizeof(char) * (ft_strlen(s1) + 1));
+	res = malloc(sizeof(char) * (my_strlen(s1) + 1));
 	if (!res)
 		return (NULL);
 	i = 0;
@@ -28,7 +28,7 @@ char	*ft_strdup(const char *s1)
 	return (res);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*my_strjoin(char const *s1, char const *s2)
 {
 	char	*res;
 	size_t	i;
@@ -36,7 +36,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	res = malloc(sizeof(char) * (my_strlen(s1) + my_strlen(s2) + 1));
 	if (!res)
 		return (NULL);
 	i = 0;
@@ -56,14 +56,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (res);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*my_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*res;
 	size_t	i;
 	size_t	j;
 	size_t	calc_len;
 
-	calc_len = ft_strlen(s);
+	calc_len = my_strlen(s);
 	if (!s || len <= 0)
 		return (NULL);
 	if (len > calc_len)
@@ -83,7 +83,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (res);
 }
 
-void	*ft_free_stash(char **stash, int create_line)
+void	*my_free_stash(char **stash, int create_line)
 {
 	char	*line;
 
@@ -100,7 +100,7 @@ void	*ft_free_stash(char **stash, int create_line)
 	}
 	else if (create_line == 1)
 	{
-		line = ft_strdup(*stash);
+		line = my_strdup(*stash);
 		free(*stash);
 		*stash = NULL;
 		return (line);
